@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    environment:
+      POSTGRES_USER: sqlmesh_user
+      POSTGRES_PASSWORD: sqlmesh_password
+      POSTGRES_DB: sqlmesh_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - sqlmesh_network
+  
+  sqlmesh:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: sqlmesh-image:latest
+    container_name: sqlmesh-container
+    depends_on:
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: sqlmesh_db
+      POSTGRES_USER: sqlmesh_user
+      POSTGRES_PASSWORD: sqlmesh_password
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    networks:
+      - sqlmesh_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  sqlmesh_network:
+    driver: bridge

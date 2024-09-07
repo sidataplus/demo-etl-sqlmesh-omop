@@ -1,0 +1,17 @@
+gateways:
+  local:
+    connection:
+      type: postgres
+      host: postgres        # This matches the service name in docker-compose.yml
+      port: 5432               # Default PostgreSQL port
+      database: sqlmesh_db
+      user: sqlmesh_user
+      password: sqlmesh_password
+
+default_gateway: local
+
+model_defaults:
+  dialect: postgres
+  start: 2024-09-06
+
+
