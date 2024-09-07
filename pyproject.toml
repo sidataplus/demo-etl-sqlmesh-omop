@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "demo-etl-sqlmesh-omop"
+version = "0.1.0"
+description = ""
+authors = ["Chinapat0843 <chinapat.onp@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+sqlmesh = "^0.121.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
