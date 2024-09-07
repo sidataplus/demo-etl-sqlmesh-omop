@@ -1,6 +1,4 @@
-Here is the complete `README.md` file entirely in Markdown format:
 
-```markdown
 # Demo ETL with SQLMesh and OMOP
 
 This repository demonstrates the use of **SQLMesh** for creating an ETL pipeline, transforming data into the **OMOP Common Data Model**. The ETL process involves extracting, transforming, and loading (ETL) data from different sources into the OMOP CDM structure, which is widely used in the healthcare industry.
