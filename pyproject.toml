@@ -2,7 +2,7 @@
 name = "demo-etl-sqlmesh-omop"
 version = "0.1.0"
 description = ""
-authors = ["Chinapat0843 <chinapat.onp@gmail.com>"]
+authors = ["Sidataplus <Sidaplus@mail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]

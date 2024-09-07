@@ -1,0 +1,4 @@
+.env
+sqlmesh_project/logs
+sqlmesh_project/.cache
+

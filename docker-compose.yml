@@ -5,9 +5,9 @@ services:
     image: postgres:14
     container_name: postgres
     environment:
-      POSTGRES_USER: sqlmesh_user
-      POSTGRES_PASSWORD: sqlmesh_password
-      POSTGRES_DB: sqlmesh_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:
@@ -24,11 +24,11 @@ services:
     depends_on:
       - postgres
     environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_PORT: 5432
-      POSTGRES_DB: sqlmesh_db
-      POSTGRES_USER: sqlmesh_user
-      POSTGRES_PASSWORD: sqlmesh_password
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "8000:8000"
     volumes:
