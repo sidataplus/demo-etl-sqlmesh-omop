@@ -1,4 +1,3 @@
-
 # Demo ETL with SQLMesh and OMOP
 
 This repository demonstrates the use of **SQLMesh** for creating an ETL pipeline, transforming data into the **OMOP Common Data Model**. The ETL process involves extracting, transforming, and loading (ETL) data from different sources into the OMOP CDM structure, which is widely used in the healthcare industry.
@@ -9,7 +8,6 @@ This repository demonstrates the use of **SQLMesh** for creating an ETL pipeline
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
-- [Usage](#usage)
 - [Configuration](#configuration)
 - [Contributing](#contributing)
 - [License](#license)
@@ -74,7 +72,6 @@ docker-compose up --build
 
 This will set up the PostgreSQL database and launch the SQLMesh application inside a Docker container.
 
-
 ## Configuration
 
 The project uses a `config.yaml` file to configure SQLMesh for different environments (development and production).
@@ -93,11 +90,6 @@ gateways:
       password: dev_password
 default_gateway: local
 
-model_defaults:
-  dialect: postgres
-  start: 2024-09-06
-
-
 ## Contributing
 
 If you would like to contribute to this project, please follow these steps:
@@ -107,4 +99,3 @@ If you would like to contribute to this project, please follow these steps:
 3. Commit your changes (`git commit -m 'Add feature'`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Open a Pull Request.
-
