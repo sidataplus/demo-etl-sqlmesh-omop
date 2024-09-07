@@ -1,6 +1,3 @@
-Here is the updated `README.md` without the **Usage** section:
-
-```markdown
 # Demo ETL with SQLMesh and OMOP
 
 This repository demonstrates the use of **SQLMesh** for creating an ETL pipeline, transforming data into the **OMOP Common Data Model**. The ETL process involves extracting, transforming, and loading (ETL) data from different sources into the OMOP CDM structure, which is widely used in the healthcare industry.
@@ -91,10 +88,7 @@ gateways:
       database: dev_db
       user: dev_user
       password: dev_password
-
 default_gateway: local
-
-```
 
 ## Contributing
 
@@ -105,9 +99,3 @@ If you would like to contribute to this project, please follow these steps:
 3. Commit your changes (`git commit -m 'Add feature'`).
 4. Push to the branch (`git push origin feature-branch`).
 5. Open a Pull Request.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-```
-
