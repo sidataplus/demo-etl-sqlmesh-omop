@@ -1,0 +1,17 @@
+gateways:
+  local:
+    connection:
+      type: postgres
+      host:               # This matches the service name in docker-compose.yml
+      port:               # Default PostgreSQL port
+      database: 
+      user: 
+      password: 
+
+default_gateway: local
+
+model_defaults:
+  dialect: postgres
+  start: 2024-09-06
+
+
