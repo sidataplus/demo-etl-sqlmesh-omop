@@ -1,6 +1,11 @@
-.env
+# SQLMesh project files
 sqlmesh_project/logs
 sqlmesh_project/.cache
-
-sqlmesh_project/.cache
 sqlmesh_project/config.yaml
+sqlmesh_project/macros/__pycache__
+
+# Environment variable file
+.env
+
+# Poetry lock file
+poetry.lock
