@@ -23,6 +23,7 @@ WITH source AS (
 -- Map gender, race, and ethnicity values to concept IDs; extract birthdate parts
 mapping AS (
     SELECT
+        ROW_NUMBER() OVER (ORDER BY person_source_value) AS person_id,
         person_source_value,
         CASE gender_source_value
             WHEN 'M' THEN 8507
@@ -48,6 +49,7 @@ mapping AS (
 -- Combined all mapped data
 final AS (
     SELECT
+        m.person_id AS person_id,
         m.gender_concept_id AS gender_concept_id,
         m.year_of_birth AS year_of_birth,
         m.month_of_birth AS month_of_birth,
@@ -64,6 +66,7 @@ final AS (
 )
 
 SELECT
+    person_id,
     gender_concept_id,
     year_of_birth,
     month_of_birth,

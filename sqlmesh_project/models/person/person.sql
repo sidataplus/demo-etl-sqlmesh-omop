@@ -33,16 +33,6 @@ MODEL (
   )))
 );
 
--- Combine mapped person_id with staging data
-WITH final AS (
-    SELECT
-        map.person_id AS person_id,
-        stg.*
-    FROM omop.map__person AS map
-    JOIN omop.stg__person AS stg
-        ON map.Id = stg.person_source_value
-)
-
 SELECT
     person_id,
     gender_concept_id,
@@ -62,4 +52,4 @@ SELECT
     NULL AS race_source_concept_id,
     ethnicity_source_value,
     NULL AS ethnicity_source_concept_id
-FROM final;
+FROM omop.stg__person;
