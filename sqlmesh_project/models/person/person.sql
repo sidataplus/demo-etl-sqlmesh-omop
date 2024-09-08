@@ -38,8 +38,8 @@ WITH final AS (
     SELECT
         map.person_id AS person_id,
         stg.*
-    FROM omop__person.map__person AS map
-    JOIN omop__person.stg__person AS stg
+    FROM omop.map__person AS map
+    JOIN omop.stg__person AS stg
         ON map.Id = stg.person_source_value
 )
 
