@@ -1,0 +1,55 @@
+name: SQLMesh CI/CD Bot
+
+on:
+  pull_request:
+    types:
+      - synchronize
+      - opened
+      - closed  # Triggers the workflow when a PR is closed or merged
+
+jobs:
+  sqlmesh:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the appropriate branch depending on PR status
+      - name: Checkout PR branch
+        if: github.event.pull_request.merged == false  # Only checkout PR branch if not merged
+        uses: actions/checkout@v4
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/merge  # Checkout the PR branch for testing
+
+      - name: Checkout main branch
+        if: github.event.pull_request.merged == true  # Checkout main branch if PR is merged
+        uses: actions/checkout@v4
+        with:
+          ref: main  # Checkout the main branch
+
+      # Step 2: Set up Docker to use within the workflow
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      # Step 3: Build and start Docker Compose services (for PRs that are not merged)
+      - name: Build and start Docker Compose for testing
+        if: github.event.pull_request.merged == false  # Only build and test if PR is not merged
+        run: |
+          docker-compose up --build -d  # Build and start services in detached mode
+          docker-compose exec sqlmesh poetry run sqlmesh plan  # Run SQLMesh plan inside the container
+
+    #   # Step 4: Run CI/CD Bot on PR branch (if not merged)
+    #   - name: Run SQLMesh CI/CD Bot
+    #     if: github.event.pull_request.merged == false  # Only run CI/CD bot on unmerged PRs
+    #     run: |
+    #       sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} run-all
+
+    #   # Step 5: Deploy to Production only if PR is merged into the main branch
+    #   - name: Deploy to Production
+    #     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    #     run: |
+    #       docker-compose up --build -d  # Ensure everything is built and up
+    #       sqlmesh_cicd -p ${{ github.workspace }} github --token ${{ secrets.GITHUB_TOKEN }} deploy-production
+
+    #   # Step 6: Tear down Docker Compose services after testing
+    #   - name: Tear down Docker Compose
+    #     if: github.event.pull_request.merged == false  # Clean up containers only for unmerged PRs
+    #     run: docker-compose down
