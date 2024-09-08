@@ -36,8 +36,25 @@ services:
     networks:
       - sqlmesh_network
 
+  
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4:7.3
+    environment:
+      PGADMIN_DEFAULT_EMAIL : ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD : ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    restart: always
+
+    ports:
+      - "5050:80"
+    networks:
+      - sqlmesh_network
+
 volumes:
   postgres_data:
+  pgadmin:
     driver: local
 
 networks:
