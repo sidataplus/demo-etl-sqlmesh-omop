@@ -36,5 +36,6 @@ WORKDIR /app/sqlmesh_project
 # Expose any port the SQLMesh app uses (replace with the correct port if needed)
 EXPOSE 8000
 
-# Run SQLMesh application (adjust the entry point based on your SQLMesh setup)
-CMD ["poetry", "run", "sqlmesh", "plan"]
+# Set the ENTRYPOINT to run Poetry and the SQLMesh UI by default
+ENTRYPOINT ["poetry", "run", "sqlmesh", "ui", "--host", "0.0.0.0", "--port", "8000"]
+
