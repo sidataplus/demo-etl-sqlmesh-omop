@@ -24,7 +24,7 @@ WITH source AS (
         ADDRESS AS address_1,
         CITY AS city,
         STATE AS state,
-        COUNTY AS county,
+        REPLACE(COUNTY, 'County', '') AS county,
         FIPS AS location_source_value,
         ZIP AS zip
     FROM omop.patients
