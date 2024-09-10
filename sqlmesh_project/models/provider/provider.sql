@@ -46,12 +46,22 @@ mapping AS (
         END AS gender_concept_id
     FROM source
 ),
+-- Map each organization to care_site_id
+caresiteID AS (
+    SELECT 
+        cs.care_site_id AS care_site_id,
+        cs.care_site_source_value AS care_site_source_value
+    FROM source AS s
+    JOIN omop.care_site AS cs
+        ON s.ORGANIZATION = cs.care_site_source_value
+),
 -- Combined all mapped data
 final AS (
     SELECT
         m.provider_id AS provider_id,
         s.provider_name AS provider_name,
         m.specialty_concept_id AS specialty_concept_id,
+        csid.care_site_id AS care_site_id,
         m.gender_concept_id AS gender_concept_id,
         s.provider_source_value AS provider_source_value,
         s.specialty_source_value AS specialty_source_value,
@@ -59,6 +69,8 @@ final AS (
     FROM source s
     JOIN mapping AS m
         ON s.provider_source_value = m.provider_source_value
+    JOIN caresiteID AS csid
+        ON s.ORGANIZATION = csid.care_site_source_value
 )
 
 SELECT
@@ -67,7 +79,7 @@ SELECT
     NULL AS npi,
     NULL AS dea,
     specialty_concept_id,
-    NULL AS care_site_id,
+    care_site_id,
     NULL AS year_of_birth,
     gender_concept_id,
     provider_source_value,
