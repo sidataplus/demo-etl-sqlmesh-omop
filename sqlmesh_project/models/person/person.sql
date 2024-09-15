@@ -47,9 +47,9 @@ SELECT
     NULL AS care_site_id,
     person_source_value,
     gender_source_value,
-    NULL AS gender_source_concept_id,
+    0 AS gender_source_concept_id,
     race_source_value,
-    NULL AS race_source_concept_id,
+    0 AS race_source_concept_id,
     ethnicity_source_value,
     NULL AS ethnicity_source_concept_id
 FROM omop.stg__person;
