@@ -14,7 +14,11 @@ MODEL (
     state VARCHAR(50),
     zip VARCHAR(10),
     county VARCHAR(50),
-    location_source_value VARCHAR(50)
+    location_source_value VARCHAR(50),
+    country_concept_id INTEGER,
+    country_source_value VARCHAR(80),
+    latitude FLOAT,
+    longitude FLOAT
   )
 );
 
@@ -26,7 +30,9 @@ WITH source AS (
         STATE AS state,
         REPLACE(COUNTY, 'County', '') AS county,
         FIPS AS location_source_value,
-        ZIP AS zip
+        ZIP AS zip,
+        LAT AS latitude,
+        LON AS longitude
     FROM omop.patients
 )
 
@@ -38,5 +44,9 @@ SELECT
     state,
     zip,
     county,
-    location_source_value
+    location_source_value,
+    NULL AS country_concept_id,
+    NULL AS country_source_value,
+    latitude,
+    longitude
 FROM source;
