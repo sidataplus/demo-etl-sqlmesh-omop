@@ -2,7 +2,7 @@ MODEL (
   name omop.int__visit_occurrence,
   kind VIEW,
   grain (
-    Id
+    visit_occurrence_id
   )
 );
 
