@@ -1,99 +1,159 @@
-# Demo ETL with SQLMesh and OMOP
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/5fc3058c-735b-4563-b38c-7fce61d967a8?raw=true" alt="sidataplus logo" width="50%" height="50%">
+</p>
 
-This repository demonstrates the use of **SQLMesh** for creating an ETL pipeline, transforming data into the **OMOP Common Data Model**. The ETL process involves extracting, transforming, and loading (ETL) data from different sources into the OMOP CDM structure, which is widely used in the healthcare industry.
+This repository showcases **SQLMesh** for building ETL pipelines that transform data into the **OMOP Common Data Model (CDM)**, a standard widely used in healthcare research.
 
-## Table of Contents
+To dive deeper into SQLMesh and its features, check out [SQLMesh](https://sqlmesh.com/).
 
-- [Overview](#overview)
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
-- [License](#license)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/622b6b00-547c-4cde-aedb-8532bb7591ec?raw=true" alt="overview pipeline" width="70%" height="70%">
+</p>
 
-## Overview
+## Core Features
 
-The project provides an end-to-end ETL pipeline using SQLMesh to manage SQL transformations and handle versioning for SQL models. SQLMesh enables tracking and deploying SQL changes in development and production environments.
+### Work with SQL Anywhere
+- Define using [simple SQL](https://sqlmesh.readthedocs.io/en/stable/concepts/models/sql_models/#sql-based-definition) — no need for complex Jinja or YAML.
+- [Self-documenting queries](https://tobikodata.com/metadata-everywhere.html) with native SQL comments.
+- Easily write SQL in [any dialect](https://sqlmesh.readthedocs.io/en/stable/integrations/overview/#execution-engines), and SQLMesh will automatically transpile it to your target SQL dialect instantly.
 
-## Features
+```sql
+MODEL (
+  name omop.stg__person,             -- Name of the model
+  kind VIEW,                         -- Specify the model type            
+  grain (
+    person_source_value              -- Define the grain (unique identifier)
+  ),
+  audits (UNIQUE_VALUES(
+    columns = (person_source_value)  -- Column to check for uniqueness
+  ))
+);
 
-- SQL-based transformations using SQLMesh.
-- Separate environments for development and production.
-- Version control for SQL models and transformations.
-- PostgreSQL as the database backend.
-- Dockerized environment for easy setup.
-- Integration with `.env` for credential security.
-
-## Prerequisites
-
-Before running this project, ensure you have the following tools installed:
-
-- **Docker**: To run the database and application containers.
-- **Poetry**: For Python dependency management.
-- **Git**: To clone the repository and manage version control.
-
-## Installation
-
-### Step 1: Clone the Repository
-
-```bash
-git clone https://github.com/Chinapat0843/demo-etl-sqlmesh-omop.git
-cd demo-etl-sqlmesh-omop
+-- Source table containing patient data
+SELECT *
+FROM omop.patients;                 
 ```
 
-### Step 2: Install Dependencies
+### Isolate Data Environments
+- Plan and apply workflows to evaluate the potential impact of changes.
 
-Install the required Python dependencies using **Poetry**:
+![OHDSI Symposium 2024 (6)](https://github.com/user-attachments/assets/f10df304-528d-47fd-a14a-2f37cbe307db)
+
+### Easily track changes
+- Automatically track [column-level lineage](https://sqlmesh.readthedocs.io/en/stable/guides/ui/?h=column+lineage#lineage-module) and enforce data contracts.
+- Manage versions of SQL models and transformations.
+
+<img width="1424" alt="Screenshot 2567-12-05 at 02 59 02" src="https://github.com/user-attachments/assets/ff1470d1-e258-4b9f-ab14-3a8f98c893ec">
+
+## Getting Started
+
+### Project Structure
+```bash
+demo-etl-sqlmesh-omop/
+├── sqlmesh_project/               # SQLMesh project configuration and models
+│   ├── models/                    # SQL model definitions
+│      ├── care_site/              # Care site data model
+│      ├── location/               # Location data model
+│      ├── person/                 # Person data model
+│      ├── provider/               # Provider data model
+│      ├── seed/                   # Models using static CSV datasets
+│   ├── seeds/                     # Seed data files
+│      ├── csv/                    # CSV seed data (or other static data sources)
+│   ├── sqlmeshenv/                # Virtual environment
+│   ├── config.yaml                # SQLMesh project configuration
+├── .env                           # Environment variables for secrets
+├── docker-compose.yml             # Docker Compose configuration
+├── Dockerfile                     # Docker image build instructions
+├── pyproject.toml                 # Python project metadata and dependencies
+```
+
+### Prerequisites
+- **Sample Data:** For demo purposes, using data generated by the [Synthea<sup>TM</sup> Patient Generator](https://github.com/synthetichealth/synthea.git).
+- **Python:** Version 3.8 or higher.
+- **SQLMesh:** Installed and configured (see [SQLMesh Documentation](https://sqlmesh.readthedocs.io/en/stable/)).
+- **Database:** A supported SQL database (e.g., PostgreSQL, MySQL).
+- **Optional:**
+  - Docker (for running the demo environment).
+  - Poetry (for Python dependency management).
+
+### Installation
+
+#### Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/sidataplus/demo-etl-sqlmesh-omop.git
+```
+
+#### Step 2: Install Dependencies
+
+To install dependencies, you can use **Poetry**:
 
 ```bash
 poetry install
 ```
 
-### Step 3: Set Up Environment Variables
-
-Create a `.env` file to protect your credentials. Add the following variables:
+Alternatively, it is recommended (but not required) to use a Python virtual environment with SQLMesh:
 
 ```bash
-POSTGRES_USER=sqlmesh_user
-POSTGRES_PASSWORD=sqlmesh_password
-POSTGRES_DB=sqlmesh_db
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
+python3 -m venv sqlmeshenv
+source sqlmeshenv/bin/activate  # On macOS/Linux
+# or
+sqlmeshenv\Scripts\activate  # On Windows
+pip install "sqlmesh[web,dbt,github,llm,postgres]"
 ```
 
-### Step 4: Docker Setup
+#### Step 3: Set Up Environment Variables
 
-Build and start the Docker containers:
+Create a `.env` file to securely store your credentials. Add the following environment variables:
+
+```bash
+POSTGRES_USER=<POSTGRES_USER>
+POSTGRES_PASSWORD=<POSTGRES_PASSWORD>
+POSTGRES_DB=<POSTGRES_DB>
+POSTGRES_HOST=<POSTGRES_HOST>
+POSTGRES_PORT=<POSTGRES_PORT>
+```
+
+#### Step 4: Docker Setup (optional, if you're using Docker)
+
+To build and start the Docker containers, run:
 
 ```bash
 docker-compose up --build
 ```
 
-This will set up the PostgreSQL database and launch the SQLMesh application inside a Docker container.
+This command will set up the PostgreSQL database and launch the SQLMesh application within a Docker container.
 
-## Configuration
+### Configuring the Connection to PostgreSQL (or Other Databases)
 
-The project uses a `config.yaml` file to configure SQLMesh for different environments (development and production).
+Inside `sqlmesh_project/`, initialize a SQLMesh project to use PostgreSQL as the default database dialect.
 
-### Sample `config.yaml`
+```bash
+sqlmesh init postgres
+```
+
+Add the following [configuration](https://sqlmesh.readthedocs.io/en/stable/integrations/engines/postgres/):
 
 ```yaml
 gateways:
   local:
     connection:
       type: postgres
-      host: postgres
-      port: 5432
-      database: dev_db
-      user: dev_user
-      password: dev_password
+      host: <POSTGRES_HOST>
+      port: <POSTGRES_PORT>
+      database: <POSTGRES_DB>
+      user: <POSTGRES_USER>
+      password: <POSTGRES_PASSWORD>
 default_gateway: local
-
-```
-### SQLmesh UI
-```
-http://localhost:8000
 ```
 
+Test the connection by running the command:
 
+```bash
+sqlmesh info
+```
+
+> After starting up, the SQLMesh web UI is served at http://localhost:8000 by default
+
+## Our Work for OHDSI Symposium 2024
+![From dbt to SQLMesh Enhancing OMOP CDM Data Conversion Efficiency](https://github.com/user-attachments/assets/558f2632-eb84-46fd-b346-4df47321c3cb)
